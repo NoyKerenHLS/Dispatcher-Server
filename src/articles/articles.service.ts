@@ -1,16 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import axios from 'axios';
 
-const END_POINT = 'https://newsapi.org/v2/top-headlines';
-const PAGE_SIZE = '20';
+const BASE_URL = 'https://newsapi.org/v2/';
 
 @Injectable()
-export class TopHeadlinesService {
-  async getArticles(filters: string, page: number) {
-    const pages = `&page=${page}&pageSize=${PAGE_SIZE}`;
+export class ArticlesService {
+  async get(scope: string, filters: string, page: number, pageSize: number) {
+    const pages = `&page=${page}&pageSize=${pageSize}`;
+    const endPoint = BASE_URL + scope;
     const apiKey = '?apiKey=' + process.env.API_KEY;
 
-    const url = END_POINT + apiKey + filters + pages;
+    const url = endPoint + apiKey + filters + pages;
 
     console.log(url);
 
@@ -23,7 +23,10 @@ export class TopHeadlinesService {
   }
 
   async getSources() {
-    const url = END_POINT + '/sources' + process.env.API_KRY;
+    const apiKey = '?apiKey=' + process.env.API_KEY;
+    const url = BASE_URL + 'top-headlines' + '/sources' + apiKey;
+
+    console.log(url);
     try {
       const { data } = await axios.get(url);
       return data;
