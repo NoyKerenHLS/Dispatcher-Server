@@ -157,6 +157,15 @@ export class ArticlesService {
       query['source.language'] = filters.language;
     }
 
+    if (filters.q) {
+      query['$or'] = [
+        { title: { $regex: filters.q } },
+        { description: { $regex: filters.q } },
+      ];
+    }
+
+    console.log(query);
+
     return query;
   }
 
