@@ -97,19 +97,16 @@ export class ArticlesService {
     const query = this.getQuery(scope, filters);
     const skip = (page - 1) * pageSize;
     const limit = pageSize;
-    let hasMorePage = true;
 
     try {
-      const totalResult = await this.articleModel.estimatedDocumentCount(query);
+      const totalResult = (await this.articleModel.find(query)).length;
       const pageCount = totalResult / pageSize;
       articles = await this.articleModel.find(query).limit(limit).skip(skip);
       const articlesData: ArticleData[] =
         this.transformToArticleDataFormat(articles);
-      hasMorePage = page < pageCount;
       return {
         status: 'ok',
         totalResults: totalResult,
-        hasMorePage: hasMorePage,
         articles: articlesData,
       };
     } catch (error) {
