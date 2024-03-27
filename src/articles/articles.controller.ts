@@ -26,6 +26,13 @@ export class ArticlesController {
     this.articlesService.fetchAndStoreSources(country);
   }
 
+  @Get('sources/db')
+  async getAllSources() {
+    const sources = await this.articlesService.getAllSources();
+    console.log('sources:', sources);
+    return sources;
+  }
+
   @Get('db')
   async getFromDB(
     @Query('scope') scope: string,

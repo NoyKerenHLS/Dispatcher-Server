@@ -66,6 +66,33 @@ export class ArticlesService {
     }
   }
 
+  async getAllSources() {
+    try {
+      const sources = await this.sourceModel.find();
+      return { status: 'ok', sources: sources };
+    } catch (error) {
+      return error;
+    }
+  }
+
+  transformToSourceData(sources: any[]) {
+    const sourcesData: Source[] = [];
+    sources.map((source) => {
+      const sourceData: Source = {
+        id: source.id,
+        name: source.name,
+        description: source.description,
+        url: source.url,
+        category: source.category,
+        language: source.language,
+        country: source.country,
+      };
+      sourcesData.push(sourceData);
+    });
+
+    return sourcesData;
+  }
+
   async fetchAndStoreSources(country: string) {
     const apiKey = '?apiKey=' + process.env.API_KEY;
     const url =
