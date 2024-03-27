@@ -191,6 +191,13 @@ export class ArticlesService {
       ];
     }
 
+    if (filters.from && filters.to) {
+      query.publishedAt = {
+        $gte: filters.from,
+        $lte: filters.to,
+      };
+    }
+
     console.log(query);
 
     return query;
