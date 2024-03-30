@@ -127,8 +127,24 @@ export class ArticlesService {
 
     try {
       const totalResult = (await this.articleModel.find(query)).length;
-      const pageCount = totalResult / pageSize;
-      articles = await this.articleModel.find(query).limit(limit).skip(skip);
+
+      if (filters.sortBy) {
+        const order = filters.sortBy === 'relevancy' ? -1 : 1;
+        articles = await this.articleModel
+          .find(query)
+          .sort({ publishedAt: order })
+          .limit(limit)
+          .skip(skip);
+      } else if (scope === 'everything') {
+        articles = await this.articleModel
+          .find(query)
+          .sort({ title: 1 })
+          .limit(limit)
+          .skip(skip);
+      } else {
+        articles = await this.articleModel.find(query).limit(limit).skip(skip);
+      }
+
       const articlesData: ArticleData[] =
         this.transformToArticleDataFormat(articles);
       return {
