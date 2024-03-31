@@ -185,7 +185,6 @@ export class ArticlesService {
 
     if (filters.sources) {
       query['source.id'] = filters.sources;
-      return query;
     }
 
     if (scope === 'top-headlines') {
